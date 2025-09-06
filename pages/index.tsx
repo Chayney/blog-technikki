@@ -11,8 +11,6 @@ import { Header } from '../shared/header/components/header';
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const blogData = await client.get({ endpoint: 'blog' });
   const categoryData = await client.get({ endpoint: 'category' });
-  console.log(JSON.stringify(blogData.contents, null, 2));
-  console.log(categoryData);
 
   return {
     props: {
@@ -23,11 +21,6 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 };
 
 export default function Home({ blogs, lists }: Props) {
-  function formatDate(isoDate: string) {
-    const date = new Date(isoDate);
-    return `${date.getFullYear()}.${('0' + (date.getMonth() + 1)).slice(-2)}.${('0' + date.getDate()).slice(-2)}`;
-  }
-
   return (
     <>
       <Header />
@@ -55,7 +48,7 @@ export default function Home({ blogs, lists }: Props) {
                   <line x1="12" y1="6" x2="12" y2="12" />
                   <line x1="12" y1="12" x2="16" y2="14" />
                 </svg>
-                <span className={styles.date}>{formatDate(blog.updatedAt)}</span>
+                <span className={styles.date}>{ new Date(blog.updatedAt).toISOString().slice(0, 10) }</span>
               </div>
               <div className={styles.buttonContainer}>
                 {blog.categories.map((cat) => (
