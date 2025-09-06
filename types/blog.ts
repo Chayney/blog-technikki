@@ -9,7 +9,7 @@ type Image = {
     width: number
 }
 
-type Blog = {
+export type Blog = {
     id: string,
     title: string,
     image: Image,
