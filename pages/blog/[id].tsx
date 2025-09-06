@@ -1,6 +1,9 @@
-import { client } from "@/libs/client";
+import { client } from "../../libs/client";
 import { Blog } from "../../types/blog";
 import { GetStaticPaths, GetStaticProps } from "next";
+import { Header } from "../../shared/header/components/header";
+import styles from '../../styles/content.module.css';
+import Image from "next/image";
 
 // SSG: パスの生成
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -34,10 +37,29 @@ export const getStaticProps: GetStaticProps<{ blog: Blog }> = async (context) =>
 
 export default function BlogId({ blog }: { blog: Blog }) {
     return (
-        <main>
-            <h1>{blog.title}</h1>
-            <p>{blog.publishedAt}</p>
-            <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-        </main>
+        <>
+            <Header />
+            <main className={styles.parentContainer}>
+                <div className={styles.leftContainer}>
+                    <div className={styles.imageContainer}>
+                        <Image
+                            src={blog.image.url}
+                            alt={`画像: ${blog.title}`}
+                            width={blog.image.width}
+                            height={blog.image.height}
+                            className={styles.contentImage}
+                            unoptimized
+                            priority
+                        />
+                    </div>
+                    <h1 className={styles.contentTitle}>{blog.title}</h1>
+                    <p>{new Date(blog.updatedAt).toISOString().slice(0, 10)}</p>
+                    <div className={`${styles.richContent}`} dangerouslySetInnerHTML={{ __html: blog.content }} />
+                </div>
+                <div className={styles.rightContainer}>
+                    <div className={styles.dummy}></div>
+                </div>
+            </main>
+        </>
     );
 }
